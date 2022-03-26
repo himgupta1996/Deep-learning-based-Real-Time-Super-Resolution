@@ -1,0 +1,180 @@
+# basic configs
+scale: 4
+manual_seed: 0
+verbose: true
+
+
+# dataset configs
+dataset:
+  degradation:
+    type: BD
+    sigma: 1.5
+
+  # test100:
+  #   name: VidCatAnimation
+  #   gt_seq_dir: data/VidCat/animation/GT
+  #   lr_seq_dir: data/VidCat/animation/4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  test101:
+    name: VidCatCrowd
+    gt_seq_dir: data/VidCat/crowd/GT
+    lr_seq_dir: data/VidCat/crowd/4xLR
+    filter_file: ~
+    num_workers: 4
+    pin_memory: true
+
+  # test102:
+  #   name: VidCatFace
+  #   gt_seq_dir: data/VidCat/face/GT
+  #   lr_seq_dir: data/VidCat/face/4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test103:
+  #   name: VidCatVehicle
+  #   gt_seq_dir: data/VidCat/vehicle/GT
+  #   lr_seq_dir: data/VidCat/vehicle/4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test104:
+  #   name: VidCatText
+  #   gt_seq_dir: data/VidCat/text/GT
+  #   lr_seq_dir: data/VidCat/text/4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test105:
+  #   name: VidCatSports
+  #   gt_seq_dir: data/VidCat/sports/GT
+  #   lr_seq_dir: data/VidCat/sports/4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test106:
+  #   name: VidCatObjects
+  #   gt_seq_dir: data/VidCat/objects/GT
+  #   lr_seq_dir: data/VidCat/objects/4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test1:
+  #   name: Vid4
+  #   gt_seq_dir: data/Vid4/GT
+  #   lr_seq_dir: data/Vid4/Gaussian4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+#
+#  test2:
+#    name: ToS3
+#    gt_seq_dir: data/ToS3/GT
+#    lr_seq_dir: data/ToS3/Gaussian4xLR
+#    filter_file: ~
+#    num_workers: 4
+#    pin_memory: true
+
+#  test3:
+#    name: REDS
+#    gt_seq_dir: data/REDS/GT/val/val_sharp
+#    lr_seq_dir: data/REDS/Bicubic4xLR/val/val_sharp_bicubic/X4
+#    filter_file: ~
+#    num_workers: 4
+#    pin_memory: true
+
+#  test4:
+#    name: Gvt72
+#    gt_seq_dir: data/Gvt72/GT
+#    lr_seq_dir: data/Gvt72/Gaussian4xLR
+#    filter_file: ~
+#    num_workers: 4
+#    pin_memory: true
+
+  # test5:
+  #   name: Real_VSR
+  #   gt_seq_dir: data/Real_VSR/GT/building
+  #   lr_seq_dir: data/Real_VSR/Gaussian4xLR/building
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test6:
+  #   name: Real_VSR
+  #   gt_seq_dir: data/Real_VSR/GT/crowd
+  #   lr_seq_dir: data/Real_VSR/Gaussian4xLR/crowd
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test7:
+  #   name: Real_VSR
+  #   gt_seq_dir: data/Real_VSR/GT/car
+  #   lr_seq_dir: data/Real_VSR/Gaussian4xLR/car
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test8:
+  #   name: Real_VSR
+  #   gt_seq_dir: data/Real_VSR/GT/miscellaneous
+  #   lr_seq_dir: data/Real_VSR/Gaussian4xLR/miscellaneous
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+  # test9:
+  #   name: Exp1
+  #   gt_seq_dir: data/Exp1/GT2
+  #   lr_seq_dir: data/Exp1/Gaussian4xLR
+  #   filter_file: ~
+  #   num_workers: 4
+  #   pin_memory: true
+
+
+# model configs
+model:
+  name: FRVSR
+
+  generator:
+    name: EGVSR  # efficient GAN-based generator
+    in_nc: 3
+    out_nc: 3
+    nf: 64
+    nb: 10
+    load_path: pretrained_models/EGVSR_iter420000.pth
+
+
+# test configs
+test:
+  # whether to save the SR results
+  save_res: true
+  res_dir: results
+
+  # temporal padding
+  padding_mode: reflect
+  num_pad_front: 5
+
+# metric configs
+metric:
+  PSNR:
+    colorspace: y
+    mult: 1.0
+
+  LPIPS:
+    model: net-lin
+    net: alex
+    colorspace: rgb
+    spatial: false
+    version: 0.1
+    mult: 1.0
+
+  tOF:
+    mult: 1.0
