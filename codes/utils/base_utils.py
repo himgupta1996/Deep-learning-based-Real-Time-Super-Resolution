@@ -2,10 +2,15 @@ import os
 import os.path as osp
 import random
 import logging
-
+import itertools
 import numpy as np
 import torch
 
+def pairwise(iterable):
+    "s -> (s0, s1), (s1, s2), (s2, s3), ..."
+    a, b = itertools.tee(iterable)
+    next(b, None)
+    return zip(a, b)
 
 def setup_random_seed(seed):
     random.seed(seed)
@@ -139,4 +144,4 @@ def setup_paths(opt, mode):
                 setup_res_dir()
 
             if opt['test'].get('save_json'):
-                setup_json_path(dataset_idx)
+                setup_json_path()
