@@ -235,15 +235,15 @@ def test(opt):
                     
                     frm_idx = [frm_idx[0] for frm_idx in data['frm_idx'][k*opt['chunk_size']:k*opt['chunk_size']+opt['chunk_size']]]
 
-                    to_interpolate_ids = list(range(1, len(lr_data)-1, 2))
-                    to_interpolate_ids_set = set(to_interpolate_ids)
-                    to_superresolute_ids = [i for i in range(0, len(lr_data)) if i not in to_interpolate_ids_set]
+                    # to_interpolate_ids = list(range(1, len(lr_data)-1, 2))
+                    # to_interpolate_ids_set = set(to_interpolate_ids)
+                    # to_superresolute_ids = [i for i in range(0, len(lr_data)) if i not in to_interpolate_ids_set]
 
-                    lr_alt_seq = lr_data[to_superresolute_ids]
-                    superresoluted_frame_ids = [frm_idx[i] for i in to_superresolute_ids]
-                    interpolated_frame_ids = [frm_idx[i] for i in to_interpolate_ids]
+                    # lr_alt_seq = lr_data[to_superresolute_ids]
+                    # superresoluted_frame_ids = [frm_idx[i] for i in to_superresolute_ids]
+                    # interpolated_frame_ids = [frm_idx[i] for i in to_interpolate_ids]
                     
-                    print(f"The size of the lr sequence is {lr_alt_seq.shape[2]}")
+                    print(f"The size of the lr sequence is {lr_data.shape[2]}")
 
                     #print(f"superresoluted frames: {superresoluted_frame_ids}, interpolated frames: {interpolated_frame_ids}")
                     #print(f"The shape of tensor which have to be super resoluted is {lr_alt_seq.shape}")
@@ -252,7 +252,7 @@ def test(opt):
                     start_time = time.time()
 
                     vsr_start_time = time.time()
-                    hr_alt_seq = model.infer(lr_alt_seq)
+                    hr_seq = model.infer(lr_data)
                     vsr_end_time = time.time()
                     #print(f"The shape of tensor which has been super resoluted is {hr_alt_seq.shape}")
 
@@ -260,7 +260,7 @@ def test(opt):
                     #hr_alt_seq1 = hr_alt_seq[..., ::-1]
                     #print(f"shape of super resoluted frames are {hr_alt_seq.shape}")
                     vi_start_time = time.time()
-                    interpolated_frames = interpolate(hr_alt_seq[..., ::-1], to_superresolute_ids, to_interpolate_ids)
+                    #interpolated_frames = interpolate(hr_alt_seq[..., ::-1], to_superresolute_ids, to_interpolate_ids)
                     vi_end_time = time.time()
                     #print(f"The length of tensor which has been interpolated is {len(interpolated_frames)}")
 
@@ -279,9 +279,9 @@ def test(opt):
                     if opt['test']['save_res']:
                         res_dir = osp.join(opt['test']['res_dir'], ds_name, model_idx)
                         res_seq_dir = osp.join(res_dir, seq_idx)
-                        data_utils.save_sequence(res_seq_dir, hr_alt_seq, superresoluted_frame_ids, to_bgr=True)
+                        data_utils.save_sequence(res_seq_dir, hr_seq, frm_idx, to_bgr=True)
                         #print(f"The interpolated frames are {interpolated_frames}")
-                        data_utils.save_sequence(res_seq_dir, interpolated_frames, interpolated_frame_ids, to_bgr=False)
+                        #data_utils.save_sequence(res_seq_dir, interpolated_frames, interpolated_frame_ids, to_bgr=False)
 
                     # compute metrics for the current sequence
                 true_seq_dir = osp.join(opt['dataset'][dataset_idx]['gt_seq_dir'], seq_idx)

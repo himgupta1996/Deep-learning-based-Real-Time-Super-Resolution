@@ -81,7 +81,7 @@ class MetricCalculator():
 
         return metric_avg_dict
 
-    def display_results(self):
+    def display_results(self, result, ds_name):
         logger = base_utils.get_logger('base')
 
         # per sequence results
@@ -93,6 +93,8 @@ class MetricCalculator():
                     metric_type,
                     mult*np.mean(metric_dict_per_seq[metric_type]), mult))
 
+                result[ds_name][seq][metric_type] = mult*np.mean(metric_dict_per_seq[metric_type])
+
         # average results
         logger.info('Average')
         metric_avg_dict = self.get_averaged_results()
@@ -100,6 +102,8 @@ class MetricCalculator():
             mult = getattr(self, '{}_mult'.format(metric_type.lower()))
             logger.info('\t{}: {:.6f} (x{})'.format(
                 metric_type, mult*avg_result, mult))
+
+        return result
 
     def save_results(self, model_idx, save_path, override=False):
         # load previous results if existed
@@ -162,9 +166,12 @@ class MetricCalculator():
         true_img_lst = base_utils.retrieve_files(true_seq_dir, 'png')
         pred_img_lst = base_utils.retrieve_files(pred_seq_dir, 'png')
 
+        # print(true_img_lst, pred_img_lst)
+
         # compute metrics for each frame
         for i in range(len(true_img_lst)):
             self.true_img_cur = cv2.imread(true_img_lst[i])[..., ::-1]  # bgr2rgb
+            
             # use a given pred_seq or load from disk
             if pred_seq is not None:
                 self.pred_img_cur = pred_seq[i]  # hwc|rgb|uint8

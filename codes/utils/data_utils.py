@@ -126,6 +126,8 @@ def save_sequence(seq_dir, seq_data, frm_idx_lst=None, to_bgr=False):
 
     # save for each frame
     os.makedirs(seq_dir, exist_ok=True)
+    # print("Saving the images in %s" % seq_dir)
+    # print("frame index list is %s" % (frm_idx_lst))
     for i in range(tot_frm):
         cv2.imwrite(osp.join(seq_dir, frm_idx_lst[i]), seq_data[i])
 
